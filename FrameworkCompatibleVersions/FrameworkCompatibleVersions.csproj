@@ -7,15 +7,15 @@
         <Copyright>© 2026 Mark Cilia Vincenti</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageType>MSBuildSdk</PackageType>
-        <Version>0.1.0-preview</Version>
+        <Version>1.0.0</Version>
         <PackageIcon>logo.png</PackageIcon>
         <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
         <Description>An MSBuild Project SDK that applies target-framework-aware floating NuGet versions to consumer-selected PackageVersion and PackageReference items.</Description>
         <PackageTags>msbuild,nuget,dependencies,multitargeting,central-package-management,floating-versions</PackageTags>
         <RepositoryType>git</RepositoryType>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <AssemblyVersion>0.0.1.0</AssemblyVersion>
-        <FileVersion>0.0.1.0</FileVersion>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IsPackable>true</IsPackable>
         <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
