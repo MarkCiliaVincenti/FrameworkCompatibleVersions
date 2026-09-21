@@ -1,6 +1,8 @@
 <Solution>
     <Folder Name="/Solution Items/">
         <File Path=".editorconfig" />
+        <File Path=".github/workflows/ci-codeql-analysis.yml" />
+        <File Path=".github/workflows/dotnet.yml" />
         <File Path="Directory.Build.props" />
         <File Path="Directory.Packages.props" />
         <File Path="global.json" />
