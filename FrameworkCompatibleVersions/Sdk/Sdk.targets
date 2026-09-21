@@ -1,0 +1,79 @@
+<Project>
+    <!--
+        Resolve the floating NuGet version expression from the evaluated target framework.
+        This SDK is package-agnostic: consumers opt individual PackageVersion or
+        PackageReference items in via the FrameworkCompatibleVersion metadata.
+
+        Supported metadata values:
+          * "true" / "HighestTestedAgainst" - the highest major the SDK has been
+            tested against for that target framework (the default policy).
+          * "MatchingMajor" - a package major that matches the target framework's
+            own runtime major (net5.0 -> 5.x, net6.0 -> 6.x, ... net10.0 -> 10.x).
+    -->
+    <PropertyGroup Condition="'$(FrameworkCompatibleVersionsEnabled)' == 'true'">
+        <!-- HighestTestedAgainst policy (also the behaviour for "true"). -->
+        <_FrameworkCompatibleVersionHighestTested Condition="'$(TargetFramework)' != '' and !$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">[6.*,7.0.0)</_FrameworkCompatibleVersionHighestTested>
+        <_FrameworkCompatibleVersionHighestTested Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0')) and !$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">[8.*,9.0.0)</_FrameworkCompatibleVersionHighestTested>
+        <_FrameworkCompatibleVersionHighestTested Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0')) and !$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0'))">[10.*,11.0.0)</_FrameworkCompatibleVersionHighestTested>
+        <_FrameworkCompatibleVersionHighestTested Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0'))">[*,13.0.0)</_FrameworkCompatibleVersionHighestTested>
+
+        <!-- Legacy non-SDK-style .NET Framework projects generally expose TargetFrameworkVersion instead of TargetFramework. -->
+        <_FrameworkCompatibleVersionHighestTested Condition="'$(TargetFramework)' == '' and '$(TargetFrameworkVersion)' != ''">[6.*,7.0.0)</_FrameworkCompatibleVersionHighestTested>
+
+        <!--
+            MatchingMajor policy. Conditions are ordered low-to-high; the last matching
+            assignment wins, so each target framework resolves to the highest netN.0 it
+            is compatible with, i.e. its own runtime major.
+
+            Frameworks earlier than net5.0 are trickier: netstandard and .NET Framework
+            have no runtime major and package majors before the .NET 5 unification are
+            not aligned (there is, for example, no 4.x of the Microsoft.Extensions.*
+            packages). For those we fall back to the lowest broadly-available major that
+            still supports netstandard2.0 (2.x), and let .NET Core apps resolve to their
+            own major (netcoreapp2.x -> 2.x, netcoreapp3.x -> 3.x).
+        -->
+        <_FrameworkCompatibleVersionMatchingMajor Condition="'$(TargetFramework)' != ''">[2.*,3.0.0)</_FrameworkCompatibleVersionMatchingMajor>
+        <_FrameworkCompatibleVersionMatchingMajor Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netcoreapp3.0'))">[3.*,4.0.0)</_FrameworkCompatibleVersionMatchingMajor>
+        <_FrameworkCompatibleVersionMatchingMajor Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net5.0'))">[5.*,6.0.0)</_FrameworkCompatibleVersionMatchingMajor>
+        <_FrameworkCompatibleVersionMatchingMajor Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">[6.*,7.0.0)</_FrameworkCompatibleVersionMatchingMajor>
+        <_FrameworkCompatibleVersionMatchingMajor Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">[7.*,8.0.0)</_FrameworkCompatibleVersionMatchingMajor>
+        <_FrameworkCompatibleVersionMatchingMajor Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">[8.*,9.0.0)</_FrameworkCompatibleVersionMatchingMajor>
+        <_FrameworkCompatibleVersionMatchingMajor Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net9.0'))">[9.*,10.0.0)</_FrameworkCompatibleVersionMatchingMajor>
+        <_FrameworkCompatibleVersionMatchingMajor Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0'))">[10.*,11.0.0)</_FrameworkCompatibleVersionMatchingMajor>
+        <_FrameworkCompatibleVersionMatchingMajor Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net11.0'))">[11.*,12.0.0)</_FrameworkCompatibleVersionMatchingMajor>
+        <_FrameworkCompatibleVersionMatchingMajor Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net12.0'))">[12.*,13.0.0)</_FrameworkCompatibleVersionMatchingMajor>
+        <_FrameworkCompatibleVersionMatchingMajor Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net13.0'))">[13.*,14.0.0)</_FrameworkCompatibleVersionMatchingMajor>
+
+        <!-- Legacy non-SDK-style .NET Framework projects: no runtime major, use the netstandard2.0-friendly floor. -->
+        <_FrameworkCompatibleVersionMatchingMajor Condition="'$(TargetFramework)' == '' and '$(TargetFrameworkVersion)' != ''">[2.*,3.0.0)</_FrameworkCompatibleVersionMatchingMajor>
+    </PropertyGroup>
+
+    <!-- Central Package Management requires an explicit opt-in for floating PackageVersion values. -->
+    <PropertyGroup Condition="'$(FrameworkCompatibleVersionsEnabled)' == 'true' and '$(ManagePackageVersionsCentrally)' == 'true'">
+        <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
+    </PropertyGroup>
+
+    <!-- CPM: update only consumer-declared PackageVersion items that opted in. -->
+    <ItemGroup Condition="'$(FrameworkCompatibleVersionsEnabled)' == 'true' and '$(_FrameworkCompatibleVersionHighestTested)' != '' and '$(ManagePackageVersionsCentrally)' == 'true'">
+        <PackageVersion Update="@(PackageVersion->WithMetadataValue('FrameworkCompatibleVersion', 'true'))"
+                        Version="$(_FrameworkCompatibleVersionHighestTested)" />
+        <PackageVersion Update="@(PackageVersion->WithMetadataValue('FrameworkCompatibleVersion', 'HighestTestedAgainst'))"
+                        Version="$(_FrameworkCompatibleVersionHighestTested)" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(FrameworkCompatibleVersionsEnabled)' == 'true' and '$(_FrameworkCompatibleVersionMatchingMajor)' != '' and '$(ManagePackageVersionsCentrally)' == 'true'">
+        <PackageVersion Update="@(PackageVersion->WithMetadataValue('FrameworkCompatibleVersion', 'MatchingMajor'))"
+                        Version="$(_FrameworkCompatibleVersionMatchingMajor)" />
+    </ItemGroup>
+
+    <!-- Non-CPM: apply the same policies directly to opted-in PackageReference items. -->
+    <ItemGroup Condition="'$(FrameworkCompatibleVersionsEnabled)' == 'true' and '$(_FrameworkCompatibleVersionHighestTested)' != '' and '$(ManagePackageVersionsCentrally)' != 'true'">
+        <PackageReference Update="@(PackageReference->WithMetadataValue('FrameworkCompatibleVersion', 'true'))"
+                          Version="$(_FrameworkCompatibleVersionHighestTested)" />
+        <PackageReference Update="@(PackageReference->WithMetadataValue('FrameworkCompatibleVersion', 'HighestTestedAgainst'))"
+                          Version="$(_FrameworkCompatibleVersionHighestTested)" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(FrameworkCompatibleVersionsEnabled)' == 'true' and '$(_FrameworkCompatibleVersionMatchingMajor)' != '' and '$(ManagePackageVersionsCentrally)' != 'true'">
+        <PackageReference Update="@(PackageReference->WithMetadataValue('FrameworkCompatibleVersion', 'MatchingMajor'))"
+                          Version="$(_FrameworkCompatibleVersionMatchingMajor)" />
+    </ItemGroup>
+</Project>

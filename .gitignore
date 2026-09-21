@@ -1,0 +1,36 @@
+## Build output
+[Bb]in/
+[Oo]bj/
+[Aa]rtifacts/
+[Dd]ebug/
+[Rr]elease/
+
+## Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+*.DotSettings.user
+
+## Test output
+TestResults/
+*.trx
+coverage*.json
+coverage*.xml
+coverage*.info
+*.coverage
+*.coveragexml
+
+## NuGet packages
+*.nupkg
+*.snupkg
+packages/
+
+## Logs / temp
+*.log
+*.tmp
+*.binlog
+
+## OS
+.DS_Store
+Thumbs.db

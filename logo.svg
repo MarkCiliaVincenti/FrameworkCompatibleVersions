@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="54 66 950 950">
+  <defs>
+    <linearGradient id="back" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#B9BEFF"/>
+      <stop offset="0.48" stop-color="#8FA2FF"/>
+      <stop offset="1" stop-color="#718AF5"/>
+    </linearGradient>
+    <linearGradient id="mid" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7A5CFF"/>
+      <stop offset="0.52" stop-color="#6754FB"/>
+      <stop offset="1" stop-color="#5649F4"/>
+    </linearGradient>
+    <linearGradient id="front" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4655FF"/>
+      <stop offset="0.52" stop-color="#343FFB"/>
+      <stop offset="1" stop-color="#2B2FEA"/>
+    </linearGradient>
+    <linearGradient id="badge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#97EF4A"/>
+      <stop offset="0.46" stop-color="#42D98B"/>
+      <stop offset="1" stop-color="#10BEC8"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- All card-local graphics are drawn horizontal, then the whole card plane is skewed. -->
+  <g transform="matrix(1,-0.085,0,1,54,191)">
+    <rect x="0" y="0" width="500" height="500" rx="76" fill="url(#back)"/>
+    <rect x="0" y="0" width="500" height="190" rx="76" fill="url(#shine)"/>
+    <circle cx="105" cy="285" r="45" fill="#F8F7F7"/>
+    <path d="M145 285H420" stroke="#F8F7F7" stroke-width="31" stroke-linecap="round"/>
+  </g>
+
+  <g transform="matrix(1,-0.085,0,1,279,259)">
+    <rect x="0" y="0" width="500" height="500" rx="76" fill="url(#mid)"/>
+    <rect x="0" y="0" width="500" height="190" rx="76" fill="url(#shine)" opacity="0.65"/>
+    <circle cx="105" cy="285" r="45" fill="#F8F7F7"/>
+    <path d="M145 285H420" stroke="#F8F7F7" stroke-width="31" stroke-linecap="round"/>
+  </g>
+
+  <g transform="matrix(1,-0.085,0,1,500,327)">
+    <rect x="0" y="0" width="500" height="500" rx="76" fill="url(#front)"/>
+    <rect x="0" y="0" width="500" height="190" rx="76" fill="url(#shine)" opacity="0.45"/>
+    <circle cx="105" cy="285" r="45" fill="#F8F7F7"/>
+    <path d="M145 285H369" stroke="#F8F7F7" stroke-width="31" stroke-linecap="round"/>
+    <path d="M355 226L445 285L355 344Z" fill="#F8F7F7" stroke="#F8F7F7" stroke-width="6" stroke-linejoin="round"/>
+  </g>
+
+  <g>
+    <circle cx="832" cy="844" r="172" fill="url(#badge)"/>
+    <path d="M752 852L811 911L919 803" fill="none" stroke="#F8F7F7" stroke-width="43" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
